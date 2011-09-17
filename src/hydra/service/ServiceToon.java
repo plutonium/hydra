@@ -55,7 +55,7 @@ public class ServiceToon implements Service
             CreateToonRequest createToonRequest = CreateToonRequest.parseFrom(message);
             System.out.println(createToonRequest);
             CreateToonResponse response = CreateToonResponse.newBuilder()
-                    .setToon(EntityId.newBuilder().setHigh(3L).setLow(2L).build())
+                    .setToon(EntityId.newBuilder().setHigh(0x300016200004433L).setLow(2L).build())
                     .build();
             this.conn.sendReply(requestId, response.toByteArray());
             System.out.println("Sent CreateToonResponse");
