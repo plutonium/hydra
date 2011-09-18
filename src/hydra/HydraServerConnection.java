@@ -185,7 +185,7 @@ public class HydraServerConnection extends Thread
         try {
             byteResponse.write(reply);
             this.out.write(byteResponse.toByteArray());
-            //this.out.flush();
+            this.out.flush();
         } catch (Exception e) {
             System.out.println("Error sending reply.");
             this.shutdownConnection();

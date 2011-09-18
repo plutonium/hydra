@@ -58,7 +58,7 @@ public class ServiceToon implements Service
             HeroCreateParams heroCreateParams = HeroCreateParams.parseFrom(createToonRequest.getAttribute(0).getValue().getMessageValue());
             System.out.println(heroCreateParams);
             CreateToonResponse response = CreateToonResponse.newBuilder()
-                    .setToon(EntityId.newBuilder().setHigh(0x300016200004433L).setLow(0x208E85B85BEA3E4AL).build())
+                    .setToon(EntityId.newBuilder().setHigh(216174302532224051L).setLow(5L).build())
                     .build();
             this.conn.sendReply(requestId, response.toByteArray());
             System.out.println("Sent CreateToonResponse");

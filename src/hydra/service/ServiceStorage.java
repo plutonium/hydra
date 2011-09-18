@@ -1,5 +1,11 @@
 package hydra.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+
+import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import D3.Hero.Hero.Digest;
@@ -119,29 +125,27 @@ public class ServiceStorage implements Service
                 this.conn.sendReply(requestId, this.loadAccountDigest);
                 System.out.println("Sent ExecuteResponse (LAD)");
             } else if (request.getQueryName().equals("GetHeroDigests")) {
+                DataInputStream parse = new DataInputStream(new ByteArrayInputStream(request.getOperations(0).getRowId().getHash().toByteArray()));
+                int unknownOne = parse.readUnsignedShort();
+                int realm = parse.readUnsignedByte();
+                int region = parse.readUnsignedByte();
+                int program = parse.readInt();
+                long entityId = parse.readLong();
+                System.out.println("[Unknown] " + unknownOne + " [Realm] " + realm + " [Region] " + region + " [Program] " + program + " [EntityId] " + entityId);
             	Digest digest = Digest.newBuilder()
             			.setVersion(891)
-            			.setHeroId(D3.OnlineService.OnlineService.EntityId.newBuilder().setIdHigh(0x300016200004433L).setIdLow(0x208E85B85BEA3E4AL).build())
+            			.setHeroId(D3.OnlineService.OnlineService.EntityId.newBuilder().setIdHigh(216174302532224051L).setIdLow(5L).build())
             			.setHeroName("Tester")
             			.setGbidClass(4041749)
             			.setLevel(1)
             			.setPlayerFlags(0)
-            			.setVisualEquipment(VisualEquipment.newBuilder()
-            					.addVisualItem(VisualItem.newBuilder())
-            					.addVisualItem(VisualItem.newBuilder())
-            					.addVisualItem(VisualItem.newBuilder())
-            					.addVisualItem(VisualItem.newBuilder())
-            					.addVisualItem(VisualItem.newBuilder())
-            					.addVisualItem(VisualItem.newBuilder())
-            					.addVisualItem(VisualItem.newBuilder())
-            					.addVisualItem(VisualItem.newBuilder())
-            					)
+            			.setVisualEquipment(VisualEquipment.newBuilder())
             			.setLastPlayedAct(0)
             			.setHighestUnlockedAct(0)
             			.setLastPlayedDifficulty(0)
             			.setHighestUnlockedDifficulty(0)
-            			.setLastPlayedQuest(0)
-            			.setLastPlayedQuestStep(0)
+            			.setLastPlayedQuest(-1)
+            			.setLastPlayedQuestStep(-1)
             			.setTimePlayed(0)
             			.build();
             	ExecuteResponse response = ExecuteResponse.newBuilder()
@@ -156,7 +160,7 @@ public class ServiceStorage implements Service
             				)
             				.build();
             	this.conn.sendReply(requestId, response.toByteArray());
-            	System.out.println(response.toByteArray().length);
+            	System.out.println(response);
             	System.out.println("Send executeResponse (GHD)");
             } else {
                 ExecuteResponse executeResponse = ExecuteResponse.newBuilder().build();
@@ -166,6 +170,12 @@ public class ServiceStorage implements Service
         }
         catch (InvalidProtocolBufferException e)
         {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
