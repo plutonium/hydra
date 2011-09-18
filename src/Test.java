@@ -30,11 +30,13 @@ import bnet.protocol.game_master.GameMaster.ListFactoriesRequest;
 import bnet.protocol.game_master.GameMaster.ListFactoriesResponse;
 import bnet.protocol.notification.NotificationProto.Notification;
 import bnet.protocol.server_pool.ServerPool.ServerInfo;
+import bnet.protocol.storage.Storage.ExecuteRequest;
 import bnet.protocol.storage.Storage.ExecuteResponse;
 import bnet.protocol.toon.Toon.ToonInfo;
 import bnet.protocol.toon.external.ToonExternal.ToonListResponse;
 import bnet.protocol.user_manager.UserManager.SubscribeToUserManagerResponse;
 
+import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.TextFormat;
 
@@ -296,7 +298,30 @@ public class Test
         (byte)0xbe, (byte)0xb6, (byte)0x99, (byte)0x2e, (byte)0x5f, (byte)0x8e, (byte)0xf0, (byte)0xda, 
         (byte)0x12, (byte)0x12, (byte)0x0a, (byte)0x10, (byte)0x02, (byte)0x00, (byte)0x00, (byte)0x62, 
         (byte)0x00, (byte)0x00, (byte)0x44, (byte)0x33, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, 
-        (byte)0x00, (byte)0x4f, (byte)0x5c, (byte)0x21
+        (byte)0x00, (byte)0x4f, (byte)0x5c, (byte)0x21, (byte)0xfe, (byte)0x00, (byte)0x37, 
+        (byte)0x00, (byte)0xb0, (byte)0x01, (byte)0x12, (byte)0xad, (byte)0x01, (byte)0x12, (byte)0x12, 
+        (byte)0x0a, (byte)0x10, (byte)0x06, (byte)0x8b, (byte)0x94, (byte)0x62, (byte)0x64, (byte)0x14, 
+        (byte)0xb9, (byte)0x4a, (byte)0x51, (byte)0x36, (byte)0xfd, (byte)0x0f, (byte)0xa6, (byte)0xe6, 
+        (byte)0x6c, (byte)0xd7, (byte)0x1a, (byte)0x96, (byte)0x01, (byte)0x0a, (byte)0x12, (byte)0x0a, 
+        (byte)0x10, (byte)0xa1, (byte)0x81, (byte)0xa8, (byte)0x35, (byte)0x68, (byte)0x24, (byte)0x41, 
+        (byte)0x60, (byte)0x09, (byte)0x7c, (byte)0x05, (byte)0x1b, (byte)0x11, (byte)0xa8, (byte)0x7f, 
+        (byte)0x04, (byte)0x12, (byte)0x12, (byte)0x0a, (byte)0x10, (byte)0x03, (byte)0x00, (byte)0x01, 
+        (byte)0x62, (byte)0x00, (byte)0x00, (byte)0x44, (byte)0x33, (byte)0x20, (byte)0x8e, (byte)0x85, 
+        (byte)0xb8, (byte)0x5b, (byte)0xea, (byte)0x3e, (byte)0x4a, (byte)0x21, (byte)0x01, (byte)0x00, 
+        (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x2a, (byte)0x63, 
+        (byte)0x08, (byte)0xfb, (byte)0x06, (byte)0x12, (byte)0x14, (byte)0x08, (byte)0xb3, (byte)0x88, 
+        (byte)0x81, (byte)0x80, (byte)0xa0, (byte)0xac, (byte)0x80, (byte)0x80, (byte)0x03, (byte)0x10, 
+        (byte)0xca, (byte)0xfc, (byte)0xa8, (byte)0xdf, (byte)0x85, (byte)0xb7, (byte)0xa1, (byte)0xc7, 
+        (byte)0x20, (byte)0x1a, (byte)0x0b, (byte)0x4e, (byte)0x45, (byte)0x57, (byte)0x4d, (byte)0x4f, 
+        (byte)0x4e, (byte)0x4b, (byte)0x23, (byte)0x33, (byte)0x34, (byte)0x39, (byte)0x25, (byte)0x15, 
+        (byte)0xac, (byte)0x3d, (byte)0x00, (byte)0x28, (byte)0x02, (byte)0x30, (byte)0x00, (byte)0x3a, 
+        (byte)0x20, (byte)0x0a, (byte)0x02, (byte)0x20, (byte)0x00, (byte)0x0a, (byte)0x02, (byte)0x20, 
+        (byte)0x00, (byte)0x0a, (byte)0x02, (byte)0x20, (byte)0x00, (byte)0x0a, (byte)0x02, (byte)0x20, 
+        (byte)0x00, (byte)0x0a, (byte)0x02, (byte)0x20, (byte)0x00, (byte)0x0a, (byte)0x02, (byte)0x20, 
+        (byte)0x00, (byte)0x0a, (byte)0x02, (byte)0x20, (byte)0x00, (byte)0x0a, (byte)0x02, (byte)0x20, 
+        (byte)0x00, (byte)0x50, (byte)0x00, (byte)0x58, (byte)0x00, (byte)0x60, (byte)0x00, (byte)0x68, 
+        (byte)0x00, (byte)0x75, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0x78, (byte)0x01, 
+        (byte)0x80, (byte)0x01, (byte)0x00
     };
     
     public static ArrayList<Integer> bindRequests = new ArrayList<Integer>();
@@ -304,6 +329,10 @@ public class Test
     public static void main(String[] args) throws IOException
     {
         System.out.println("test");
+        
+        //ByteString testba = ByteString.
+        //System.out.println(Digest.parseFrom(testba));
+        
         CodedInputStream is = CodedInputStream.newInstance(Test.test);
         while(is.isAtEnd() != true) {
             int service = is.readRawByte();
@@ -327,6 +356,12 @@ public class Test
             //if (10 == (service & 0xFF) && 1 == method) { System.out.println(AddNotification.parseFrom(message)); }
             //System.out.println(ToonListResponse.parseFrom(message));
             if ((byte)0xFE == service && requestId == 3) { System.out.println(LogonResponse.parseFrom(message)); }
+            if ((byte)0xFE == service && requestId == 55) {
+            	ExecuteResponse request = ExecuteResponse.parseFrom(message);
+            	System.out.println(request);
+            	Digest digest = Digest.parseFrom(request.getResults(0).getData(0).getData());
+            	System.out.println(digest);
+            }
         }
     }
     

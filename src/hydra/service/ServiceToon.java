@@ -2,6 +2,7 @@ package hydra.service;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import D3.OnlineService.OnlineService.HeroCreateParams;
 import bnet.protocol.Entity.EntityId;
 import bnet.protocol.Rpc.NoData;
 import bnet.protocol.authentication.Authentication.LogonRequest;
@@ -54,8 +55,10 @@ public class ServiceToon implements Service
         {
             CreateToonRequest createToonRequest = CreateToonRequest.parseFrom(message);
             System.out.println(createToonRequest);
+            HeroCreateParams heroCreateParams = HeroCreateParams.parseFrom(createToonRequest.getAttribute(0).getValue().getMessageValue());
+            System.out.println(heroCreateParams);
             CreateToonResponse response = CreateToonResponse.newBuilder()
-                    .setToon(EntityId.newBuilder().setHigh(0x300016200004433L).setLow(2L).build())
+                    .setToon(EntityId.newBuilder().setHigh(0x300016200004433L).setLow(0x208E85B85BEA3E4AL).build())
                     .build();
             this.conn.sendReply(requestId, response.toByteArray());
             System.out.println("Sent CreateToonResponse");

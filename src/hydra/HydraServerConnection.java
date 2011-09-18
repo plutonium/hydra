@@ -5,6 +5,7 @@ import hydra.service.ServiceAuthentication;
 import hydra.service.ServiceChannelInvitation;
 import hydra.service.ServiceGameUtilities;
 import hydra.service.ServiceList;
+import hydra.service.ServicePresence;
 import hydra.service.ServiceStorage;
 import hydra.service.ServiceToon;
 import hydra.service.ServiceUnknown;
@@ -54,11 +55,12 @@ public class HydraServerConnection extends Thread
         this.socket = socket;
         this.server = server;
         
-        this.knownServices.put(0x0DECFC01, "Authentication");
+        this.knownServices.put(0x0DECFC01, "Authenticatiotn");
         this.knownServices.put(0x4124C31B, "Toon");
         this.knownServices.put(0xDA6E4BB9, "Storage");
         this.knownServices.put(0x83040608, "ChannelInvitation");
         this.knownServices.put(0x3FC1274D, "GameUtilities");
+        this.knownServices.put(0xFA0796FF, "Presence");
         
         this.serviceClasses.put(0x0DECFC01, new ServiceAuthentication(this));
         this.serviceClasses.put(0xE5A11099, new ServiceUnknown(this));
@@ -66,6 +68,7 @@ public class HydraServerConnection extends Thread
         this.serviceClasses.put(0xDA6E4BB9, new ServiceStorage(this));
         this.serviceClasses.put(0x83040608, new ServiceChannelInvitation(this));
         this.serviceClasses.put(0x3FC1274D, new ServiceGameUtilities(this));
+        this.serviceClasses.put(0xFA0796FF, new ServicePresence(this));
     }
     
     public void run()

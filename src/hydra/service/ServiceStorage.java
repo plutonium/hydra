@@ -2,16 +2,23 @@ package hydra.service;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import D3.Hero.Hero.Digest;
+import D3.Hero.Hero.VisualEquipment;
+import D3.Hero.Hero.VisualItem;
+import bnet.protocol.Entity;
 import bnet.protocol.Entity.EntityId;
 import bnet.protocol.Rpc.NoData;
 import bnet.protocol.authentication.Authentication.LogonRequest;
 import bnet.protocol.authentication.Authentication.LogonResponse;
+import bnet.protocol.storage.Storage.Cell;
 import bnet.protocol.storage.Storage.ExecuteRequest;
 import bnet.protocol.storage.Storage.ExecuteResponse;
 import bnet.protocol.storage.Storage.OpenColumnRequest;
 import bnet.protocol.storage.Storage.OpenColumnResponse;
 import bnet.protocol.storage.Storage.OpenTableRequest;
 import bnet.protocol.storage.Storage.OpenTableResponse;
+import bnet.protocol.storage.Storage.OperationResult;
+import bnet.protocol.storage.Storage.TableId;
 import hydra.HydraServerConnection;
 
 public class ServiceStorage implements Service
@@ -111,6 +118,46 @@ public class ServiceStorage implements Service
             if (request.getQueryName().equals("LoadAccountDigest")) {
                 this.conn.sendReply(requestId, this.loadAccountDigest);
                 System.out.println("Sent ExecuteResponse (LAD)");
+            } else if (request.getQueryName().equals("GetHeroDigests")) {
+            	Digest digest = Digest.newBuilder()
+            			.setVersion(891)
+            			.setHeroId(D3.OnlineService.OnlineService.EntityId.newBuilder().setIdHigh(0x300016200004433L).setIdLow(0x208E85B85BEA3E4AL).build())
+            			.setHeroName("Tester")
+            			.setGbidClass(4041749)
+            			.setLevel(1)
+            			.setPlayerFlags(0)
+            			.setVisualEquipment(VisualEquipment.newBuilder()
+            					.addVisualItem(VisualItem.newBuilder())
+            					.addVisualItem(VisualItem.newBuilder())
+            					.addVisualItem(VisualItem.newBuilder())
+            					.addVisualItem(VisualItem.newBuilder())
+            					.addVisualItem(VisualItem.newBuilder())
+            					.addVisualItem(VisualItem.newBuilder())
+            					.addVisualItem(VisualItem.newBuilder())
+            					.addVisualItem(VisualItem.newBuilder())
+            					)
+            			.setLastPlayedAct(0)
+            			.setHighestUnlockedAct(0)
+            			.setLastPlayedDifficulty(0)
+            			.setHighestUnlockedDifficulty(0)
+            			.setLastPlayedQuest(0)
+            			.setLastPlayedQuestStep(0)
+            			.setTimePlayed(0)
+            			.build();
+            	ExecuteResponse response = ExecuteResponse.newBuilder()
+            			.addResults(OperationResult.newBuilder()
+            					.setTableId(TableId.newBuilder().setHash(request.getOperations(0).getTableId().getHash()))
+            					.addData(Cell.newBuilder()
+            							.setColumnId(request.getOperations(0).getColumnId())
+            							.setRowId(request.getOperations(0).getRowId())
+            							.setVersion(1L)
+            							.setData(digest.toByteString())
+            						)
+            				)
+            				.build();
+            	this.conn.sendReply(requestId, response.toByteArray());
+            	System.out.println(response.toByteArray().length);
+            	System.out.println("Send executeResponse (GHD)");
             } else {
                 ExecuteResponse executeResponse = ExecuteResponse.newBuilder().build();
                 this.conn.sendReply(requestId, executeResponse.toByteArray());
